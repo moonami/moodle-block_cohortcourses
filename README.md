@@ -30,7 +30,7 @@ Once added block will display configuration link to the administrator.
 
 ## Copyright
 
-&copy; 2018 Moonami LLC.  Code for this plugin is licensed under the [GPLv3 license][GPLv3].
+&copy; 2018 [Moonami LLC.][moonami-site]  Code for this plugin is licensed under the [GPLv3 license][GPLv3].
 
 Any Moonami trademarks and logos included in these plugins are property of Moonami and should not be reused,
 redistributed, modified, repurposed, or otherwise altered or used outside of this plugin.
@@ -38,3 +38,4 @@ redistributed, modified, repurposed, or otherwise altered or used outside of thi
 [moodle-31]: https://docs.moodle.org/dev/Moodle_3.1_release_notes "Moodle 3.1 Release Notes"
 [GPLv3]: http://www.gnu.org/licenses/gpl-3.0.html "GNU General Public License"
 [moodle-gdpr]: https://docs.moodle.org/35/en/GDPR "GDPR MoodleDocs"
+[moonami-site]: https://www.moonami.com/ "Moonami LLC"
