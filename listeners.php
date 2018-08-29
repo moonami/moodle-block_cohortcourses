@@ -25,6 +25,7 @@
 
 use core\event\cohort_deleted;
 use core\event\course_deleted;
+use block_cohortcourses\plugin;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -34,7 +35,7 @@ defined('MOODLE_INTERNAL') || die();
 function block_cohortcourses_cohort_deleted(cohort_deleted $event) {
     global $DB;
 
-    $DB->delete_records('block_cohortcourses', ['cohortid' => $event->objectid]);
+    $DB->delete_records(plugin::TABLE, ['cohortid' => $event->objectid]);
 }
 
 /**
@@ -43,5 +44,5 @@ function block_cohortcourses_cohort_deleted(cohort_deleted $event) {
 function block_cohortcourses_course_deleted(course_deleted $event) {
     global $DB;
 
-    $DB->delete_records('block_cohortcourses', ['courseid' => $event->objectid]);
+    $DB->delete_records(plugin::TABLE, ['courseid' => $event->objectid]);
 }

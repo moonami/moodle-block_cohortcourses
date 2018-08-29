@@ -23,31 +23,22 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_cohortcourses\output;
+namespace block_cohortcourses;
 
 defined('MOODLE_INTERNAL') || die();
 
-use plugin_renderer_base;
-use renderable;
-
 /**
- * Cohort courses renderer.
+ * Class plugin
  *
  * @package   block_cohortcourses
  * @author    Darko Miletic <dmiletic@moonami.com>
  * @copyright 2018 Moonami LLC
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class renderer extends plugin_renderer_base {
+abstract class plugin {
 
-    /**
-     * Return the main content for the block cohort courses.
-     *
-     * @param  courses $courses The main renderable
-     * @return string HTML string
-     */
-    public function render_courses(courses $courses) {
-        return $this->render_from_template('block_cohortcourses/main', $courses->export_for_template($this));
-    }
+    const COMPONENT = 'block_cohortcourses';
+    const CAPCONFIG = 'block/cohortcourses:configure';
+    const TABLE     = 'block_cohortcourses';
 
 }

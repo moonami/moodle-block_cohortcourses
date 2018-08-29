@@ -24,24 +24,22 @@
  */
 
 use block_cohortcourses\forms\assign;
+use block_cohortcourses\plugin;
 
 require(__DIR__.'/../../config.php');
 
 require_login();
 $PAGE->set_context(context_system::instance());
-require_capability('block/cohortcourses:configure', $PAGE->context);
+require_capability(plugin::CAPCONFIG, $PAGE->context);
 
 $PAGE->set_url('/blocks/cohortcourses/index.php');
-$PAGE->set_title(get_string('configtitle', 'block_cohortcourses'));
-$PAGE->set_heading(get_string('configtitle', 'block_cohortcourses'));
+$PAGE->set_title(get_string('configtitle', plugin::COMPONENT));
+$PAGE->set_heading(get_string('configtitle', plugin::COMPONENT));
 
 /** @var core_renderer $OUTPUT */
 $OUTPUT;
 
-$assign = new assign();
-
 echo $OUTPUT->header();
 
-$assign->display();
 
 echo $OUTPUT->footer();

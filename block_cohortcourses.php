@@ -24,6 +24,7 @@
  */
 
 use block_cohortcourses\output\courses;
+use block_cohortcourses\plugin;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -36,13 +37,11 @@ defined('MOODLE_INTERNAL') || die();
  */
 class block_cohortcourses extends block_base {
 
-    const COMPONENT = 'block_cohortcourses';
-
     /**
      * @throws coding_exception
      */
     public function init() {
-        $this->title = get_string('pluginname', self::COMPONENT);
+        $this->title = get_string('pluginname', plugin::COMPONENT);
     }
 
     /**
@@ -59,7 +58,7 @@ class block_cohortcourses extends block_base {
     public function get_content() {
         if (isloggedin() and empty($this->content)) {
             $renderable = new courses();
-            $renderer = $this->page->get_renderer(self::COMPONENT);
+            $renderer = $this->page->get_renderer(plugin::COMPONENT);
 
             $this->content = new stdClass();
             $this->content->text = $renderer->render($renderable);

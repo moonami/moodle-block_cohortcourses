@@ -33,6 +33,7 @@ use context_system;
 use dml_exception;
 use coding_exception;
 use moodle_url;
+use block_cohortcourses\plugin;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -93,7 +94,7 @@ class courses implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $courses = $this->available_courses();
         $configurl = '';
-        $canconfig = has_capability('block/cohortcourses:configure', context_system::instance());
+        $canconfig = has_capability(plugin::CAPCONFIG, context_system::instance());
         if ($canconfig) {
             $url = new moodle_url('/blocks/cohortcourses/index.php');
             $configurl = $url->out(false);
