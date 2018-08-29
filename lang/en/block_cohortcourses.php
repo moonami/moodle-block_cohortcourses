@@ -31,3 +31,4 @@ $string['cohortcourses:configure'] = 'Configure course assignments to cohort';
 $string['pluginname'] = 'Cohort courses';
 $string['privacy:metadata'] = 'The Cohort courses block only displays available courses for enrollment.';
 $string['configtitle'] = 'Configure';
+$string['itedomum'] = 'Go Back';

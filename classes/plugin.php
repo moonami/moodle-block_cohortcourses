@@ -40,5 +40,7 @@ abstract class plugin {
     const COMPONENT = 'block_cohortcourses';
     const CAPCONFIG = 'block/cohortcourses:configure';
     const TABLE     = 'block_cohortcourses';
+    const PERPAGE   = 25;
+    const PARAMNAME = 'page';
 
 }

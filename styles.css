@@ -7,3 +7,19 @@
 .block_cohortcourses_courses_view ul {
     list-style-type: none;
 }
+
+#block_cohortcourses_select_selectcourses {
+    overflow-y: auto;
+    overflow-x: auto;
+    height: 300px;
+    width: 200px;
+    word-wrap: break-word;
+}
+
+#block_cohortcourses_select_availablecourses {
+    overflow-y: auto;
+    overflow-x: auto;
+    height: 300px;
+    width: 200px;
+    word-wrap: break-word;
+}

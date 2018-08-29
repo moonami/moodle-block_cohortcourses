@@ -23,31 +23,30 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_cohortcourses\forms;
+use block_cohortcourses\forms\assign_form;
+use block_cohortcourses\plugin;
 
-use moodleform;
+require(__DIR__.'/../../config.php');
+require_once($CFG->dirroot.'/cohort/lib.php');
 
-defined('MOODLE_INTERNAL') || die();
+require_login();
+$PAGE->set_context(context_system::instance());
+require_capability(plugin::CAPCONFIG, $PAGE->context);
 
-require_once($CFG->libdir.'/formslib.php');
+$cohortid = required_param('id', PARAM_INT);
+$returnurl = optional_param('returnurl', null, PARAM_LOCALURL);
 
-/**
- * Class assign
- *
- * @package   block_cohortcourses
- * @author    Darko Miletic <dmiletic@moonami.com>
- * @copyright 2018 Moonami LLC
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class assign extends moodleform {
+$PAGE->set_url('/blocks/cohortcourses/assign.php', ['id' => $cohortid]);
+$PAGE->set_title(get_string('configtitle', plugin::COMPONENT));
+$PAGE->set_heading(get_string('configtitle', plugin::COMPONENT));
 
-    /**
-     * @return void
-     */
-    protected function definition() {
-        $form = $this->_form;
+/** @var core_renderer $OUTPUT */
+$OUTPUT;
 
-        $this->add_action_buttons();
-    }
+$form = new assign_form($returnurl ? $returnurl : $PAGE->url);
 
-}
+echo $OUTPUT->header();
+
+$form->display();
+
+echo $OUTPUT->footer();
