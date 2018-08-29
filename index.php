@@ -17,10 +17,10 @@
 /**
  * Cohort courses block.
  *
- * @package    block_cohortcourses
- * @author     Darko Miletic <dmiletic@moonami.com>
- * @copyright  2018 Moonami LLC
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_cohortcourses
+ * @author    Darko Miletic <dmiletic@moonami.com>
+ * @copyright 2018 Moonami LLC
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 use block_cohortcourses\forms\assign;

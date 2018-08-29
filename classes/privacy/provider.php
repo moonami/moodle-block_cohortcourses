@@ -17,10 +17,10 @@
 /**
  * Privacy Subsystem implementation for Cohort courses block.
  *
- * @package    block_cohortcourses
- * @author     Darko Miletic <dmiletic@moonami.com>
- * @copyright  2018 Moonami LLC
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_cohortcourses
+ * @author    Darko Miletic <dmiletic@moonami.com>
+ * @copyright 2018 Moonami LLC
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace block_cohortcourses\privacy;
@@ -32,9 +32,9 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Privacy Subsystem for block_cohortcourses implementing null_provider.
  *
- * @author     Darko Miletic <dmiletic@moonami.com>
- * @copyright  2018 Moonami LLC
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author    Darko Miletic <dmiletic@moonami.com>
+ * @copyright 2018 Moonami LLC
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements null_provider {
 

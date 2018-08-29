@@ -17,10 +17,10 @@
 /**
  * Cohort courses block.
  *
- * @package    block_cohortcourses
- * @author     Darko Miletic <dmiletic@moonami.com>
- * @copyright  2018 Moonami LLC
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_cohortcourses
+ * @author    Darko Miletic <dmiletic@moonami.com>
+ * @copyright 2018 Moonami LLC
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace block_cohortcourses\output;
@@ -38,10 +38,10 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class courses
- * @package    block_cohortcourses
- * @author     Darko Miletic <dmiletic@moonami.com>
- * @copyright  2018 Moonami LLC
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_cohortcourses
+ * @author    Darko Miletic <dmiletic@moonami.com>
+ * @copyright 2018 Moonami LLC
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class courses implements renderable, templatable {
 

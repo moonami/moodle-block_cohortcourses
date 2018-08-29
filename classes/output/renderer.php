@@ -17,10 +17,10 @@
 /**
  * Cohort courses block.
  *
- * @package    block_cohortcourses
- * @author     Darko Miletic <dmiletic@moonami.com>
- * @copyright  2018 Moonami LLC
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_cohortcourses
+ * @author    Darko Miletic <dmiletic@moonami.com>
+ * @copyright 2018 Moonami LLC
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace block_cohortcourses\output;
@@ -33,10 +33,10 @@ use renderable;
 /**
  * Cohort courses renderer.
  *
- * @package    block_cohortcourses
- * @author     Darko Miletic <dmiletic@moonami.com>
- * @copyright  2018 Moonami LLC
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_cohortcourses
+ * @author    Darko Miletic <dmiletic@moonami.com>
+ * @copyright 2018 Moonami LLC
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends plugin_renderer_base {
 
