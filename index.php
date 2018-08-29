@@ -99,7 +99,8 @@ $table->head  = [
     get_string('idnumber', 'cohort'),
     get_string('description', 'cohort'),
     get_string('memberscount', 'cohort'),
-    get_string('component', 'cohort')
+    get_string('component', 'cohort'),
+    get_string('edit'),
 ];
 
 $table->colclasses = [
@@ -108,7 +109,8 @@ $table->colclasses = [
     'leftalign id',
     'leftalign description',
     'leftalign size',
-    'centeralign source'
+    'centeralign source',
+    'centeralign action'
 ];
 $table->id = 'cohorts';
 $table->attributes['class'] = 'admintable generaltable';
