@@ -51,48 +51,39 @@ class courses implements renderable, templatable {
      * @throws dml_exception
      */
     private function available_courses() {
-        global $USER, $DB, $CFG;
+        global $USER, $DB;
 
-        require_once($CFG->dirroot.'/cohort/lib.php');
-        $result = ['', []];
-        $mycohorts = [];
-        $cohorts = cohort_get_cohorts(context_system::instance()->id, 0, 0);
-        if (empty($cohorts) or empty($cohorts['cohorts'])) {
-            return $result;
-        }
-        foreach ($cohorts['cohorts'] as $cohort) {
-            if (cohort_is_member($cohort->id, $USER->id)) {
-                $mycohorts[] = $cohort->id;
-            }
-        }
-
-        if (empty($mycohorts)) {
-            return $result;
-        }
-
-        list($insql, $params) = $DB->get_in_or_equal($mycohorts, SQL_PARAMS_NAMED);
-        $params += ['visible' => true, 'format' => 'site', 'ctxlevel' => CONTEXT_COURSE, 'userid' => $USER->id];
+        $params = [
+            'visible'  => true,
+            'format'   => 'site',
+            'ctxlevel' => CONTEXT_COURSE,
+            'userid'   => $USER->id,
+            'userid2'  => $USER->id,
+        ];
         $sql = "SELECT c.id, c.fullname, c.shortname, c.idnumber
-                  FROM {course} c
+                  FROM {course}               c
                   JOIN {block_cohortcourses} bc ON bc.courseid = c.id
+                  JOIN {cohort_members}      cm ON bc.cohortid = cm.cohortid
                  WHERE c.visible = :visible
                        AND
                        c.format <> :format
                        AND NOT EXISTS (
                          SELECT ctx.instanceid
-                           FROM {role_assignments} ra
-                           JOIN {context}         ctx ON ctx.contextlevel = :ctxlevel AND ctx.id = ra.contextid
+                           FROM {role_assignments}  ra
+                           JOIN {context}          ctx ON ctx.contextlevel = :ctxlevel AND ctx.id = ra.contextid
                           WHERE ra.userid = :userid AND ctx.instanceid = c.id
                        )
                        AND
-                       bc.cohortid $insql
+                       cm.userid = :userid2
                ";
-        $rt = $DB->get_records_sql($sql, $params);
+        $res = $DB->get_records_sql($sql, $params);
         $baseurl = new moodle_url('/course/view.php');
-        foreach ($rt as &$item) {
+        $result = [];
+        foreach ($res as $item) {
             $item->curl = $baseurl->out(false, ['id' => $item->id]);
+            $result[] = $item;
         }
-        return [$sql, $rt];
+        return $result;
     }
 
     /**
@@ -100,7 +91,7 @@ class courses implements renderable, templatable {
      * @return array|stdClass|void
      */
     public function export_for_template(renderer_base $output) {
-        list($sql, $courses) = $this->available_courses();
+        $courses = $this->available_courses();
         $configurl = '';
         $canconfig = has_capability('block/cohortcourses:configure', context_system::instance());
         if ($canconfig) {
@@ -109,10 +100,10 @@ class courses implements renderable, templatable {
         }
         $result = [
             'showconfig' => $canconfig,
-            'configurl' => $configurl,
-            'uniqid' => random_string(4),
+            'configurl'  => $configurl,
+            'uniqid'     => random_string(4),
             'hascourses' => !empty($courses),
-            'courses' => array_values($courses)
+            'courses'    => $courses
         ];
         return $result;
     }
