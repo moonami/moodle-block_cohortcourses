@@ -7,7 +7,7 @@
 ## Purporse
 
 The purporse of this block is to provide functionality of assigning 
-set of courses to individual system-wide cohorts.
+set of courses to individual cohorts.
 
 The assignments are stored in the custom table.
 Once configured block will display list of courses assigned to the specific cohort in which currrently 
