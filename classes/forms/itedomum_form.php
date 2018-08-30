@@ -23,14 +23,31 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace block_cohortcourses\forms;
+
+use block_cohortcourses\plugin;
+use moodleform;
+use coding_exception;
+
 defined('MOODLE_INTERNAL') || die();
 
-$string['cohortcourses:addinstance'] = 'Add a new cohort courses block';
-$string['cohortcourses:myaddinstance'] = 'Add a new cohort courses block to Dashboard';
-$string['cohortcourses:configure'] = 'Configure course assignments to cohort';
-$string['pluginname'] = 'Cohort courses';
-$string['privacy:metadata'] = 'The Cohort courses block only displays available courses for enrollment.';
-$string['configtitle'] = 'Configure';
-$string['itedomum'] = 'Go Back';
-$string['selectedcourses'] = '{$a} Courses';
-$string['availablecourses'] = 'Available Courses';
+require_once($CFG->libdir.'/formslib.php');
+
+/**
+ * Class itedomum_form
+ *
+ * @package   block_cohortcourses
+ * @author    Darko Miletic <dmiletic@moonami.com>
+ * @copyright 2018 Moonami LLC
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class itedomum_form extends moodleform {
+
+    /**
+     * @throws coding_exception
+     */
+    protected function definition() {
+        $this->add_action_buttons(false, get_string('itedomum', plugin::COMPONENT));
+    }
+
+}

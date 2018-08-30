@@ -23,8 +23,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use block_cohortcourses\forms\assign_form;
 use block_cohortcourses\plugin;
+use block_cohortcourses\forms\assign_form;
+use block_cohortcourses\forms\itedomum_form;
 
 require(__DIR__.'/../../config.php');
 require_once($CFG->dirroot.'/cohort/lib.php');
@@ -34,19 +35,30 @@ $PAGE->set_context(context_system::instance());
 require_capability(plugin::CAPCONFIG, $PAGE->context);
 
 $cohortid = required_param('id', PARAM_INT);
+$cohort = $DB->get_record('cohort', ['id' => $cohortid], 'id, name', MUST_EXIST);
 $returnurl = optional_param('returnurl', null, PARAM_LOCALURL);
-
-$PAGE->set_url('/blocks/cohortcourses/assign.php', ['id' => $cohortid]);
+$pageurlparams = ['id' => $cohortid];
+if ($returnurl) {
+    $pageurlparams['returnurl'] = $returnurl;
+}
+$PAGE->set_url('/blocks/cohortcourses/assign.php', $pageurlparams);
 $PAGE->set_title(get_string('configtitle', plugin::COMPONENT));
 $PAGE->set_heading(get_string('configtitle', plugin::COMPONENT));
 
 /** @var core_renderer $OUTPUT */
 $OUTPUT;
 
-$form = new assign_form($returnurl ? $returnurl : $PAGE->url);
+$postform = new assign_form($PAGE->url, ['cohort' => $cohort]);
+if (($data = $postform->get_data()) !== null) {
+    $_POST = null;
+}
+
+$gobackform = new itedomum_form($returnurl ? $returnurl : $PAGE->url);
+$form = new assign_form($PAGE->url, ['cohort' => $cohort]);
 
 echo $OUTPUT->header();
 
 $form->display();
+$gobackform->display();
 
 echo $OUTPUT->footer();

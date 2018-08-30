@@ -28,7 +28,9 @@ namespace block_cohortcourses\forms;
 use block_cohortcourses\plugin;
 use moodleform;
 use MoodleQuickForm_select;
-use MoodleQuickForm_button;
+use MoodleQuickForm_submit;
+use coding_exception;
+use dml_exception;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -45,29 +47,118 @@ require_once($CFG->libdir.'/formslib.php');
 class assign_form extends moodleform {
 
     /**
+     * assign_form constructor.
+     * @param string $action
+     * @param mixed $customdata
+     * @param string $method
+     * @param string $target
+     * @param array $attributes
+     * @param bool $editable
+     * @param array|null $ajaxformdata
+     */
+    public function __construct($action = null, $customdata = null, $method = 'post', $target = '',
+                                $attributes = null, $editable = true, array $ajaxformdata = null) {
+        $attrs = ['id' => 'block_cohortcourses_assign_form'];
+        if (!empty($attributes)) {
+            $attrs += $attributes;
+        }
+        parent::__construct($action, $customdata, $method, $target, $attrs, $editable, $ajaxformdata);
+    }
+
+    /**
+     * @param  int $cohortid
+     * @return array
+     */
+    protected function getcohortcourses($cohortid) {
+        global $DB;
+
+        $sql = "SELECT bc.courseid, c.fullname
+                  FROM {block_cohortcourses} bc
+                  JOIN {cohort}              ch ON ch.id = bc.cohortid
+                  JOIN {course}               c ON c.id = bc.courseid
+                 WHERE bc.cohortid = :cohortid
+               ";
+
+        return $DB->get_records_sql_menu($sql, ['cohortid' => $cohortid]);
+    }
+
+    /**
+     * @param  int $cohortid
+     * @return array
+     */
+    protected function getavailablecourses($cohortid) {
+        global $DB;
+
+        $sql = "SELECT c.id, c.fullname
+                  FROM {course} c
+                 WHERE NOT EXISTS (
+                  SELECT bc.courseid
+                    FROM {block_cohortcourses} bc
+                    JOIN {cohort}              ch ON ch.id = bc.cohortid
+                    JOIN {course}               c ON c.id = bc.courseid
+                   WHERE bc.cohortid = :cohortid
+                         AND
+                         bc.courseid = c.id
+                 )
+                 AND
+                 c.format <> :format
+               ";
+
+        return $DB->get_records_sql_menu($sql, ['cohortid' => $cohortid, 'format' => 'site']);
+    }
+
+    /**
+     * @param  int $cohortid
+     * @param  array $courses
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    protected function addtocohort($cohortid, array $courses) {
+        global $DB;
+        $objects = [];
+        foreach ($courses as $courseid) {
+            $objects[] = (object)['courseid' => $courseid, 'cohortid' => $cohortid];
+        }
+        $DB->insert_records(plugin::TABLE, $objects);
+    }
+
+    /**
+     * @param int $cohortid
+     * @param  array $courses
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    protected function removefromcohort($cohortid, array $courses) {
+        global $DB;
+        list($insql, $params) = $DB->get_in_or_equal($courses, SQL_PARAMS_NAMED);
+        $params['cohortid'] = $cohortid;
+        $DB->delete_records_select(plugin::TABLE, "cohortid = :cohortid AND courseid $insql", $params);
+    }
+
+    /**
      * @return void
      */
     protected function definition() {
         global $DB;
 
         $form = $this->_form;
-        $options = ['aaaaaaaaaaaaaa' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'];
-        for ($pos = 0, $count = 55; $pos < $count; $pos++) {
-            $options["aaa$pos"] = "yeah $pos";
+        if (empty($this->_customdata['cohort'])) {
+            print_error('invalidarguments', 'core_error');
         }
+        $cohort = $this->_customdata['cohort'];
 
-        /** @var MoodleQuickForm_button $btn1 */
-        $btn1 = $form->createElement('button', 'moveleft', '<<', ['id' => 'btnmoveleft']);
-        /** @var MoodleQuickForm_button $btn2 */
-        $btn2 = $form->createElement('button', 'moveright', '>>', ['id' => 'btnmoveright']);
+        /** @var MoodleQuickForm_submit $btn1 */
+        $btn1 = $form->createElement('submit', 'moveleft', '<<', ['id' => 'btnmoveleft']);
+        /** @var MoodleQuickForm_submit $btn2 */
+        $btn2 = $form->createElement('submit', 'moveright', '>>', ['id' => 'btnmoveright']);
 
         $itemgroup = [];
         /** @var MoodleQuickForm_select $selectedcourses */
         $selectedcourses = $form->createElement(
             'select',
             'selectedcourses',
-            'Selected courses',
-            $options,
+            get_string('selectedcourses', plugin::COMPONENT, $cohort->name).'<br>',
+            $this->getcohortcourses($cohort->id),
             ['id' => 'block_cohortcourses_select_selectcourses']
         );
         $selectedcourses->setMultiple(true);
@@ -76,18 +167,34 @@ class assign_form extends moodleform {
         $availablecourses = $form->createElement(
             'select',
             'availablecourses',
-            'Available courses',
-            $options,
+            get_string('availablecourses', plugin::COMPONENT).'<br>',
+            $this->getavailablecourses($cohort->id),
             ['id' => 'block_cohortcourses_select_availablecourses']
         );
         $availablecourses->setMultiple(true);
 
         $itemgroup = [$selectedcourses, $btn1, $btn2, $availablecourses];
         $form->addGroup($itemgroup, 'assigngrp', '', ' ');
-        $form->registerNoSubmitButton('moveleft');
-        $form->registerNoSubmitButton('moveright');
 
-        $this->add_action_buttons(false, get_string('itedomum', plugin::COMPONENT));
+        // Select labels are hidden by default when being part of a group.
+        $selectedcourses->setHiddenLabel(false);
+        $availablecourses->setHiddenLabel(false);
+    }
+
+    /**
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    public function definition_after_data() {
+        $cohort = $this->_customdata['cohort'];
+        if (($data = $this->get_data()) !== null) {
+            if (!empty($data->assigngrp['moveleft']) and !empty($data->assigngrp['availablecourses'])) {
+                $this->addtocohort($cohort->id, $data->assigngrp['availablecourses']);
+            }
+            if (!empty($data->assigngrp['moveright']) and !empty($data->assigngrp['selectedcourses'])) {
+                $this->removefromcohort($cohort->id, $data->assigngrp['selectedcourses']);
+            }
+        }
     }
 
 }

@@ -23,3 +23,7 @@
     width: 200px;
     word-wrap: break-word;
 }
+
+#block_cohortcourses_assign_form label {
+    display: inline;
+}
