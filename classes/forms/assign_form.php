@@ -156,28 +156,59 @@ class assign_form extends moodleform {
         $selectedcourses = $form->createElement(
             'select',
             'selectedcourses',
-            get_string('selectedcourses', plugin::COMPONENT, $cohort->name).'<br>',
+            get_string('selectedcourses', plugin::COMPONENT, $cohort->name),
             $this->getcohortcourses($cohort->id),
             ['id' => 'block_cohortcourses_select_selectcourses']
         );
         $selectedcourses->setMultiple(true);
+        /** @var \MoodleQuickForm_static $selectlabel */
+        $selectlabel = $form->createElement(
+            'static',
+            'selectlabel',
+            '',
+            sprintf(
+                '<div class="block_cohortcourses_inliner"><span>%s</span><br>',
+                get_string('selectedcourses', plugin::COMPONENT, $cohort->name)
+            )
+        );
 
         /** @var MoodleQuickForm_select $availablecourses */
         $availablecourses = $form->createElement(
             'select',
             'availablecourses',
-            get_string('availablecourses', plugin::COMPONENT).'<br>',
+            get_string('availablecourses', plugin::COMPONENT),
             $this->getavailablecourses($cohort->id),
             ['id' => 'block_cohortcourses_select_availablecourses']
         );
         $availablecourses->setMultiple(true);
+        /** @var \MoodleQuickForm_static $availablelabel */
+        $availablelabel = $form->createElement(
+            'static',
+            'availablelabel',
+            '',
+            sprintf(
+                '<div class="block_cohortcourses_inliner"><span>%s</span><br>',
+                get_string('availablecourses', plugin::COMPONENT)
+            )
+        );
+        $postlabel = $form->createElement(
+            'static',
+            'postlabel',
+            '',
+            '</div>'
+        );
 
-        $itemgroup = [$selectedcourses, $btn1, $btn2, $availablecourses];
+        $itemgroup = [
+            $selectlabel,
+            $selectedcourses,
+            $postlabel,
+            $btn1,
+            $btn2,
+            $availablelabel,
+            $availablecourses,
+            $postlabel
+        ];
         $form->addGroup($itemgroup, 'assigngrp', '', ' ');
-
-        // Select labels are hidden by default when being part of a group.
-        $selectedcourses->setHiddenLabel(false);
-        $availablecourses->setHiddenLabel(false);
     }
 
     /**

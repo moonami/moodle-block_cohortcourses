@@ -27,3 +27,7 @@
 #block_cohortcourses_assign_form label {
     display: inline;
 }
+
+.block_cohortcourses_inliner {
+    display: inline-block;
+}

@@ -35,8 +35,11 @@ require_capability(plugin::CAPCONFIG, $PAGE->context);
 $pagenr = optional_param(plugin::PARAMNAME, 0, PARAM_INT);
 
 $PAGE->set_url('/blocks/cohortcourses/index.php', [plugin::PARAMNAME => $pagenr]);
-$PAGE->set_title(get_string('configtitle', plugin::COMPONENT));
-$PAGE->set_heading(get_string('configtitle', plugin::COMPONENT));
+$title = get_string('configtitle', plugin::COMPONENT);
+$PAGE->navbar->add($title, $PAGE->url);
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
+$PAGE->set_pagelayout('admin');
 
 /** @var core_renderer $OUTPUT */
 $OUTPUT;

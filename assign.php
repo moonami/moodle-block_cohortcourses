@@ -42,8 +42,11 @@ if ($returnurl) {
     $pageurlparams['returnurl'] = $returnurl;
 }
 $PAGE->set_url('/blocks/cohortcourses/assign.php', $pageurlparams);
-$PAGE->set_title(get_string('configtitle', plugin::COMPONENT));
-$PAGE->set_heading(get_string('configtitle', plugin::COMPONENT));
+$title = get_string('configtitle', plugin::COMPONENT);
+$PAGE->navbar->add($title, $PAGE->url);
+$PAGE->set_title($title);
+$PAGE->set_heading($title);
+$PAGE->set_pagelayout('admin');
 
 /** @var core_renderer $OUTPUT */
 $OUTPUT;
