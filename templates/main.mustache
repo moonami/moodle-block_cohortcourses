@@ -31,13 +31,16 @@
         <div role="tabpanel" id="cohortcourses_courses_view">
             <div id="courses-view-{{uniqid}}" data-region="courses-view" class="block_cohortcourses_courses_view">
                 {{# hascourses}}
-                    <ul>
-                        {{# courses }}
+                    {{# cohorts }}
+                        <h4>{{cohort}}</h4>
+                        <ul>
+                            {{# courses}}
                             <li>
                                 <a href="{{curl}}">{{fullname}}</a>
                             </li>
-                        {{/ courses }}
-                    </ul>
+                            {{/ courses}}
+                        </ul>
+                    {{/ cohorts }}
                 {{/ hascourses}}
             </div>
 

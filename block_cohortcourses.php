@@ -45,10 +45,28 @@ class block_cohortcourses extends block_base {
     }
 
     /**
+     * @throws coding_exception
+     */
+    public function specialization() {
+        if (empty($this->config->blocktitle)) {
+            $this->title = get_string('blocktitledef', plugin::COMPONENT);
+        } else {
+            $this->title = $this->config->blocktitle;
+        }
+    }
+
+    /**
      * @return array
      */
     public function applicable_formats() {
         return ['all' => true];
+    }
+
+    /**
+     * @return bool
+     */
+    public function instance_allow_config() {
+        return true;
     }
 
     /**

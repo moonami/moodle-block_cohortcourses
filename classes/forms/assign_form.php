@@ -95,16 +95,15 @@ class assign_form extends moodleform {
                   SELECT bc.courseid
                     FROM {block_cohortcourses} bc
                     JOIN {cohort}              ch ON ch.id = bc.cohortid
-                    JOIN {course}               c ON c.id = bc.courseid
-                   WHERE bc.cohortid = :cohortid
-                         AND
-                         bc.courseid = c.id
+                   WHERE bc.cohortid = :cohortid AND bc.courseid = c.id
                  )
                  AND
                  c.format <> :format
+                 AND
+                 c.visible = :visible
                ";
 
-        return $DB->get_records_sql_menu($sql, ['cohortid' => $cohortid, 'format' => 'site']);
+        return $DB->get_records_sql_menu($sql, ['cohortid' => $cohortid, 'format' => 'site', 'visible' => true]);
     }
 
     /**

@@ -51,7 +51,7 @@ class courses implements renderable, templatable {
      * @throws coding_exception
      * @throws dml_exception
      */
-    private function available_courses() {
+    public function available_courses() {
         global $USER, $DB;
 
         $params = [
@@ -61,10 +61,11 @@ class courses implements renderable, templatable {
             'userid'   => $USER->id,
             'userid2'  => $USER->id,
         ];
-        $sql = "SELECT c.id, c.fullname, c.shortname, c.idnumber
+        $sql = "SELECT c.id, c.fullname, co.id AS cohortid, co.name
                   FROM {course}               c
                   JOIN {block_cohortcourses} bc ON bc.courseid = c.id
                   JOIN {cohort_members}      cm ON bc.cohortid = cm.cohortid
+                  JOIN {cohort}              co ON bc.cohortid = co.id
                  WHERE c.visible = :visible
                        AND
                        c.format <> :format
@@ -76,13 +77,20 @@ class courses implements renderable, templatable {
                        )
                        AND
                        cm.userid = :userid2
+              ORDER BY co.id ASC
                ";
         $res = $DB->get_records_sql($sql, $params);
         $baseurl = new moodle_url('/course/view.php');
         $result = [];
+        $cohortid = 0;
         foreach ($res as $item) {
+            if ($cohortid != $item->cohortid) {
+                $cohortid = $item->cohortid;
+                $obj = (object)['cohort' => $item->name, 'courses' => []];
+                $result[] = &$obj;
+            }
             $item->curl = $baseurl->out(false, ['id' => $item->id]);
-            $result[] = $item;
+            $obj->courses[] = $item;
         }
         return $result;
     }
@@ -94,7 +102,7 @@ class courses implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $courses = $this->available_courses();
         $configurl = '';
-        $canconfig = has_capability(plugin::CAPCONFIG, context_system::instance());
+        $canconfig = plugin::canconfig();
         if ($canconfig) {
             $url = new moodle_url('/blocks/cohortcourses/index.php');
             $configurl = $url->out(false);
@@ -104,7 +112,7 @@ class courses implements renderable, templatable {
             'configurl'  => $configurl,
             'uniqid'     => random_string(4),
             'hascourses' => !empty($courses),
-            'courses'    => $courses
+            'cohorts'    => $courses
         ];
         return $result;
     }

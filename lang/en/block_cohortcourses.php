@@ -34,3 +34,5 @@ $string['configtitle'] = 'Configure';
 $string['itedomum'] = 'Go Back';
 $string['selectedcourses'] = '{$a} Courses';
 $string['availablecourses'] = 'Available Courses';
+$string['blocktitle'] = 'Block title';
+$string['blocktitledef'] = 'Available Courses';
